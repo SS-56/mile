@@ -1,0 +1,107 @@
+import 'package:flutter/material.dart';
+import 'dart:math';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Janken(),
+    );
+  }
+}
+
+class Janken extends StatefulWidget {
+  @override
+  State<Janken> createState() => _JankenState();
+}
+
+class _JankenState extends State<Janken> {
+  String myHand = '✊';
+  String comHand = '✊';
+  String result = '勝負しろ';
+
+  void seleHand(String yourHand) {
+    myHand = yourHand;
+    generateComHand();
+    judge();
+    setState(() {});
+  }
+
+  void generateComHand() {
+    final ranNum = Random().nextInt(3);
+    comHand = ranNumToHand(ranNum);
+  }
+
+  String ranNumToHand(int ranNum) {
+    switch (ranNum) {
+      case 0:
+        return '✊';
+      case 1:
+        return '✋';
+      case 2:
+        return '✌';
+      default:
+        return 'no';
+    }
+  }
+
+  void judge() {
+    if (myHand == comHand) {
+      result = 'あいこ';
+    } else if (myHand == '✊' && comHand == '✌' ||
+        myHand == '✌' && comHand == '✋' ||
+        myHand == '✋' && comHand == '✊') {
+      result = 'やられた';
+    } else {
+      result = 'この負け犬がっ！';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('j'),
+      ),
+      body: Center(
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Text(
+            result,
+            style: TextStyle(fontSize: 32),
+          ),
+          SizedBox(height: 16),
+          Text(comHand,
+               style: TextStyle(fontSize: 32),
+              ),
+          SizedBox(height: 16),
+          Text(myHand,
+               style: TextStyle(fontSize: 32),
+              ),
+          SizedBox(height: 16),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            ElevatedButton(
+              onPressed: () {
+                seleHand('✊');
+              },
+              child: Text('✊'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                seleHand('✌');
+              },
+              child: Text('✌'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                seleHand('✋');
+              },
+              child: Text('✋'),
+            ),
+          ]),
+        ]),
+      ),
+    );
+  }
+}
